@@ -4,9 +4,11 @@
  * @returns {number}
  */
 function factorial(n) {
-  let computation = 1;
+  let calculatingFactorial = 1;
+
   for (let i = 1; i <= n; i++) {
-    computation *= i;
+    calculatingFactorial *= i;
   }
-  return computation;
+
+  return calculatingFactorial;
 }
