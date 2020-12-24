@@ -4,5 +4,15 @@
  * @returns {Number}
  */
 function sumSalary(salaries) {
-  // ваш код...
+  let amountOfSalaries = 0;
+
+  for (const key in salaries) {
+
+    if (isFinite(salaries[key])) {
+      amountOfSalaries += salaries[key];
+    }
+
+  }
+
+  return amountOfSalaries;
 }
