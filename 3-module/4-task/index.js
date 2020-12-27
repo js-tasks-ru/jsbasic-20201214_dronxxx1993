@@ -4,19 +4,14 @@
  * @param {number} age - максимальный возраст
  * @returns {string}
  */
+
 function showSalary(users, maxAge) {
 
-  let selectedUsers = '';
-
-  users.forEach(({age, name, balance}) => {
-
+  return users.map(({age, name, balance}) => {
     if (age <= maxAge) {
-      selectedUsers += `${name}, ${balance}\n`;
+      return `${name}, ${balance}\n`;
     }
+  }).join('').slice(0, -1);
 
-    return selectedUsers;
-
-  });
-
-  return selectedUsers.slice(0, -1);
 }
+

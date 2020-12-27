@@ -10,9 +10,7 @@ function getMinMax(str) {
 
   newStr = newStr.filter((item) => {
     return !!Number(item);
-  });
-
-  newStr = newStr.map((item) => Number(item))
+  }).map((item) => Number(item))
 
   result.max = Math.max(...newStr);
   result.min = Math.min(...newStr);
