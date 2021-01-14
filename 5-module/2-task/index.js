@@ -5,9 +5,9 @@ function toggleText() {
   btnShowAndHide.addEventListener('click', () =>{
 
     if (text.hasAttribute('hidden')) {
-      text.removeAttribute('hidden');
+      text.hidden = false;
     } else {
-      text.setAttribute('hidden', 'true');
+      text.hidden = true;
     }
 
   });
