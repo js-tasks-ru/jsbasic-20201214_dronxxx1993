@@ -17,7 +17,6 @@ const _createContainerCard = () => {
 };
 
 const _createCardElement = (data = {}) => {
-  console.log(data);
   const div = document.createElement('div');
   const _containerCard = _createContainerCard();
   div.classList.add('carousel__inner');
@@ -128,7 +127,7 @@ export default class Carousel {
     });
 
     this.elem.addEventListener('product-add', (e) => {
-      console.log(e.detail);
+
     });
   }
 
