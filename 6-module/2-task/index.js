@@ -44,7 +44,7 @@ export default class ProductCard {
     });
 
     this.elem.addEventListener("product-add", (e) => {
-      console.log(e.detail);
+      
     });
   }
 
