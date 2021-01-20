@@ -1,5 +1,5 @@
 import createElement from '../../assets/lib/create-element.js';
-import _createSlider from './create-slider.js';
+import _createSlider from './slider-create.js';
 
 export default class StepSlider {
   constructor({ steps, value = 0 }) {
