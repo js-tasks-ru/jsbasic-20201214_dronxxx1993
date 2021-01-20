@@ -32,12 +32,17 @@
 export default class UserTable {
 
   constructor(rows) {
-    this.rows = rows;
-    this.elem = this.render();
-    this.addListener();
+    this._rows = rows;
+    this._container = null;
+    this.btnRemove = null;
+    this._render()
   }
 
-  __createTable(elem) {
+  get elem () {
+    return this._container;
+  }
+
+  _createTable(elem) {
     const table = document.createElement('table');
 
     table.innerHTML = `
@@ -59,8 +64,7 @@ export default class UserTable {
   }
 
   _createBodyTable() {
-
-    return this.rows.map(({age, name, salary, city}) => {
+    return this._rows.map(({age, name, salary, city}) => {
       return `<tr>
                 <td>${name}</td>
                 <td>${age}</td>
@@ -72,23 +76,22 @@ export default class UserTable {
     }).join('');
   }
 
-  destroy(event) {
-    event.closest('tr').remove();
+  _render() {
+    this._container = this._createTable(this._createBodyTable())
+    this._addListener();
   }
 
-  addListener() {
-    this.btn = this.elem.querySelectorAll('button');
+  _addListener() {
+    this.btnRemove = this._container.querySelectorAll('button');
 
-    this.btn.forEach(btn => {
-      btn.addEventListener('click', (event) => {
-        this.destroy(event.target);
-      });
+    this.btnRemove.forEach(btn => {
+      btn.addEventListener('click', this.destroy);
     });
-
   }
 
-  render() {
-    return this.__createTable(this._createBodyTable());
+  destroy = (event) => {
+    event.target.removeEventListener('click', this.destroy);
+    event.target.closest('tr').remove();
   }
 
 }

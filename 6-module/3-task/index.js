@@ -1,134 +1,91 @@
 import createElement from '../../assets/lib/create-element.js';
-
-const _createContainerCard = () => {
-  const div = document.createElement('div');
-  div.classList.add('carousel');
-
-  div.insertAdjacentHTML('beforeend',
-    `
-      <div class="carousel__arrow carousel__arrow_right">
-        <img src="../../assets/images/icons/angle-icon.svg" alt="icon">
-      </div>
-      <div class="carousel__arrow carousel__arrow_left">
-        <img src="../../assets/images/icons/angle-left-icon.svg" alt="icon">
-    </div>`);
-
-  return div;
-};
-
-const _createCardElement = (data = {}) => {
-  const div = document.createElement('div');
-  const _containerCard = _createContainerCard();
-  div.classList.add('carousel__inner');
-
-  data.map((item) => {
-    div.insertAdjacentHTML('beforeend', `
-    <div class="carousel__slide" >
-        <img src="../../assets/images/carousel//${item.image}" class="card__image" alt="${item.name || 'product'}">
-        <div class="carousel__caption">
-          <span class="carousel__price">€${item.price.toFixed(2) || 0}</span>
-          <div class="carousel__title">${item.name || 'Неизвестное блюдо'}</div>
-          <button type="button" class="carousel__button" data-id = ${item.id}>
-            <img src="../../assets/images/icons/plus-icon.svg" alt="icon">
-          </button>
-        </div>
-    </div>
-      `);
-    return div;
-  }).join('');
-  _containerCard.append(div);
-
-  return _containerCard;
-};
+import createCarouselElement from './create-card.js';
 
 export default class Carousel {
   constructor(slides) {
-    this.DEFAULT_WIDTH = 980;
-    this.DEFAULT_LENGTH = 3;
+    this._DEFAULT_WIDTH = 980;
 
-    this.slides = slides;
-    this.container = null;
-    this.containerTransition = null;
-    this.position = 0;
-    this.widthCarouselTransition = null;
-    this.containerWidth = null;
+    this._slides = slides;
+    this._container = null;
+    this._containerTransition = null;
+    this._position = 0;
+    this._widthCarouselTransition = null;
+    this._containerWidth = null;
     this._carouselContainer = null;
-    this.carouselLength = null;
+    this._carouselLength = null;
     this._buttonNext = null;
     this._buttonPrev = null;
 
     this.render();
-    this.generateEventListener(this.container);
+    this._getElementCarousel();
   }
 
   render() {
-    this.container = _createCardElement(this.slides || {});
-    this.containerTransition = this.container.querySelector('.carousel__inner');
+    this._container = createElement(createCarouselElement(this._slides));
+    this._containerTransition = this._container.querySelector('.carousel__inner');
   }
 
-
   get elem() {
-    return this.container || createElement(`<h2>Неизвестная ошибка</h2>`);
+    return this._container || createElement(`<h2>Неизвестная ошибка</h2>`);
   }
 
   carouselTransition() {
-    this.containerTransition.style.transform = `translateX(${this.position}px)`;
+    this._containerTransition.style.transform = `translateX(${this._position}px)`;
   }
 
   checkPosition() {
-    if (this.position >= 0) {
+    if (this._position >= 0) {
       this._buttonPrev.style.display = 'none';
     } else {
       this._buttonPrev.style.display = 'flex';
     }
 
-    if (Math.abs(this.position) >= this.containerWidth) {
+    if (Math.abs(this._position) >= this._containerWidth) {
       this._buttonNext.style.display = 'none';
     } else {
       this._buttonNext.style.display = 'flex';
     }
   }
 
-  generateEventListener(container) {
-    this._buttonNext = container.querySelector('.carousel__arrow_right');
-    this._buttonPrev = container.querySelector('.carousel__arrow_left');
-    this._buttonAddToCart = container.querySelectorAll('.carousel__button');
-    this.carouselLength = this.container.querySelectorAll('.carousel__slide').length ;
+  _getElementCarousel = () => {
+    this._buttonNext = this._container.querySelector('.carousel__arrow_right');
+    this._buttonPrev = this._container.querySelector('.carousel__arrow_left');
+    this._buttonAddToCart = this._container.querySelectorAll('.carousel__button');
+    this._carouselLength = this._container.querySelectorAll('.carousel__slide').length ;
 
     this._buttonPrev.style.display = 'none';
 
-    this._buttonNext.addEventListener('click', (event) => {
-
-      if (!this.widthCarouselTransition) {
-        this.widthCarouselTransition = document.querySelector('.carousel__inner').clientWidth;
-        this.containerWidth = (this.carouselLength - 1) * this.widthCarouselTransition;
-      }
-
-      this.position -= this.widthCarouselTransition || this.DEFAULT_WIDTH;
-      this.carouselTransition();
-      this.checkPosition();
-    });
-
-    this._buttonPrev.addEventListener('click', (event) => {
-
-      this.position += this.widthCarouselTransition || this.DEFAULT_WIDTH;
-      this.carouselTransition();
-      this.checkPosition();
-    });
+    this._buttonNext.addEventListener('click', this._onCarouselButtonNext);
+    this._buttonPrev.addEventListener('click', this._onCarouselButtonPrev);
 
     this._buttonAddToCart.forEach(btn => {
-      btn.addEventListener('click', (event) => {
-        const events = new CustomEvent("product-add", {
-          bubbles: true,
-          detail: event.currentTarget.dataset.id,
-        });
-        this.elem.dispatchEvent(events);
-      });
+      btn.addEventListener('click', this._onCarouselButtonClickAdd);
     });
+  }
 
-    this.elem.addEventListener('product-add', (e) => {
+  _onCarouselButtonNext = () => {
+    if (!this._widthCarouselTransition) {
+      this._widthCarouselTransition = document.querySelector('.carousel__inner').clientWidth;
+      this._containerWidth = (this._carouselLength - 1) * this._widthCarouselTransition;
+    }
 
+    this._position -= this._widthCarouselTransition || this._DEFAULT_WIDTH;
+    this.carouselTransition();
+    this.checkPosition();
+  }
+
+  _onCarouselButtonPrev = () => {
+    this._position += this._widthCarouselTransition || this._DEFAULT_WIDTH;
+    this.carouselTransition();
+    this.checkPosition();
+  }
+
+  _onCarouselButtonClickAdd = (event) => {
+    const events = new CustomEvent("product-add", {
+      bubbles: true,
+      detail: event.currentTarget.dataset.id,
     });
+    this.elem.dispatchEvent(events);
   }
 
 }
