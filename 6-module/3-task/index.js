@@ -81,7 +81,6 @@ export default class Carousel {
   }
 
   _onCarouselButtonClickAdd = (event) => {
-    console.log(2)
     const events = new CustomEvent("product-add", {
       bubbles: true,
       detail: event.currentTarget.dataset.id,

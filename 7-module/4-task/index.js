@@ -42,11 +42,11 @@ export default class StepSlider {
       this._removeMouse();
     });
     this._sliderThumb.addEventListener('pointerdown', this.onMouseMove);
-    document.addEventListener('pointerup', this._removeMouse);
   }
 
   onMouseMove = () => {
     document.addEventListener('pointermove', this._calculateMousePosition);
+    document.addEventListener('pointerup', this._removeMouse);
   }
 
   _calculateMousePosition = (event) => {
@@ -74,6 +74,7 @@ export default class StepSlider {
     this._addedCustomEvents();
     this._sliderThumb.pointerdown = null;
     document.removeEventListener('pointermove', this._calculateMousePosition);
+    document.removeEventListener('pointerup', this._removeMouse);
   }
 
   _settingSliderStyles = (valuePercents) => {
