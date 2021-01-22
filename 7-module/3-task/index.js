@@ -42,8 +42,9 @@ export default class StepSlider {
 
     this.span.forEach((span) => {
       span.classList.remove("slider__step-active");
-    })
-    this.span[[Number(this._value)]].classList.add("slider__step-active")
+    });
+    
+    this.span[Number(this._value)].classList.add("slider__step-active")
     this.sliderThumb.style.left = `${valuePercents}%`;
     this.sliderProgress.style.width = `${valuePercents}%`;
     this.sliderValue.innerHTML = this._value;

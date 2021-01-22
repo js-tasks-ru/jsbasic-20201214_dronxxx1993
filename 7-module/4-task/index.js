@@ -26,7 +26,7 @@ export default class StepSlider {
 
   _getElementsForListener () {
     this._sliderValue = this._container.querySelector('.slider__value');
-
+    this.click = null;
     this._sliderThumb = this._container.querySelector('.slider__thumb');
     this._sliderProgress = this._container.querySelector('.slider__progress');
     this.stepActive = this._container.querySelectorAll('.slider__steps span');
@@ -41,6 +41,7 @@ export default class StepSlider {
       this._calculateMousePosition(event);
       this._removeMouse();
     });
+
     this._sliderThumb.addEventListener('pointerdown', this.onMouseMove);
   }
 
